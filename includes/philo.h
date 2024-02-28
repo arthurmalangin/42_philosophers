@@ -6,7 +6,7 @@
 /*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:20:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/01/31 17:10:54 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 03:11:24 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void			init_all(pthread_mutex_t *forks, t_philo *philos, t_program *program, cha
 void			create_thread(t_program	*program, t_philo *philo, pthread_mutex_t *forks);
 size_t			ft_get_time(void);
 int				ft_usleep(size_t milliseconds);
-void			end_all_thread(t_program *program, t_philo *philo);
+void			end_all_thread(t_program **program, t_philo **philo);
+void			print_message(t_philo *philo, int message);
 
 #endif

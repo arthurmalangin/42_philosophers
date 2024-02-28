@@ -6,7 +6,7 @@
 /*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:07:39 by amalangi          #+#    #+#             */
-/*   Updated: 2024/01/31 20:05:09 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 03:15:35 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,34 +59,35 @@ void	*routine(void *ptr)
 	
 	philo = ptr;
 	if (philo->id % 2 == 0)
-		ft_usleep(1);
-	while (is_alive(philo))
+		ft_usleep(100);
+	while (is_alive(philo) && philo->nb_philo > 1)
 	{
 		eat(philo);
 		bed(philo);
 		think(philo);
-	}
+	}	
 }
 
-int	check_death(t_program *program, t_philo *philo)
+int	check_death(t_program **program, t_philo **philo)
 {
 	int	i;
 
 	i = 0;
-	while (i < program->philos->nb_philo - 1) //TODO DATA RACE MAYBE
+	while (i < (*program)->nb_philo)
 	{
-		pthread_mutex_lock(&program->philos[i].protect_eat);
-		if (ft_get_time() - program->philos[i].time_last_eat >= program->philos[i].time_to_die && program->philos[i].dead == 0)
+		//printf("check death\n");
+		pthread_mutex_lock(&(*philo)[i].protect_eat);//&program->philos[i].protect_eat
+		if (ft_get_time() - (*program)->philos[i].time_last_eat >= (*program)->philos[i].time_to_die && (*program)->philos[i].dead == 0)
 		{
-			pthread_mutex_lock(&program->philos[i].protect_dead);
-			printf("%ld %d died\n", ft_get_time() - program->philos->time_start, program->philos[i].id);
-			program->philos[i].dead = 1;
-			program->dead = 1;
-			pthread_mutex_unlock(&program->philos[i].protect_dead);
-			pthread_mutex_unlock(&program->philos[i].protect_eat);
+			pthread_mutex_lock(&(*program)->philos[i].protect_dead);
+			printf("%ld %d died\n", ft_get_time() - (*program)->philos->time_start, (*program)->philos[i].id);
+			(*program)->philos[i].dead = 1;
+			(*program)->dead = 1;
+			pthread_mutex_unlock(&(*program)->philos[i].protect_dead);
+			pthread_mutex_unlock(&(*program)->philos[i].protect_eat);
 			return (1);
 		}
-		pthread_mutex_unlock(&program->philos[i].protect_eat);
+		pthread_mutex_unlock(&(*program)->philos[i].protect_eat);
 		i++;
 	}
 	return (0);
@@ -100,9 +101,12 @@ void	*monitoring(void *ptr)
 	program = (t_program *)ptr;
 	while (1)
 	{
-		if (check_death(program, program->philos) == 1)
+		if (check_death(&program, &program->philos) == 1)
 			break ;
 	}
+	/*printf("dead flag %d\n", program->dead);
+	printf("philo dead %d\n", program->philos[0].dead);
+	printf("end monitoring\n");*/
 	return (ptr);
 }
 
@@ -114,14 +118,14 @@ void	create_thread(t_program	*program, t_philo *philo, pthread_mutex_t *forks)
 	i = 0;
 	if (pthread_create(&elmonitor, NULL, &monitoring, program))
 		printf("Error Thread creation\n");
-	while (i < program->nb_philo - 1)
+	while (i < program->nb_philo)
 	{
 		if(pthread_create(&philo[i].thread, NULL, &routine, &philo[i]))
 			printf("Error Thread Creation\n");
 		i++;
 	}
 	i = 0;
-	while (i < program->nb_philo - 1)
+	while (i < program->nb_philo)
 	{
 		if (pthread_join(philo[i].thread, NULL))
 			printf("Error Thread join\n");

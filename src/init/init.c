@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:06:52 by amalangi          #+#    #+#             */
-/*   Updated: 2024/01/31 17:11:19 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/26 23:11:12 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_forks(pthread_mutex_t *forks, char **argv)
 
 	i = 0;
 	nb_philo = (int)ft_atoll(argv[1]);
-	while (i < nb_philo - 1)
+	while (i < nb_philo)
 	{
 		pthread_mutex_init(&forks[i], NULL);
 		i++;
@@ -46,7 +46,7 @@ void	init_philos(t_philo *philos, t_program *program, pthread_mutex_t *forks, ch
 	
 	i = 0;
 	nb_philo = (int)ft_atoll(argv[1]);
-	while (i < nb_philo - 1)
+	while (i < nb_philo)
 	{
 		philos[i].id = i + 1;
 		philos[i].nb_philo = nb_philo;

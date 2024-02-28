@@ -1,8 +1,8 @@
 NAME      		=		philo
 
-CC              =       cc
+CC              =       clang
 
-FLAG            =      	-g -pthread
+FLAG            =      	-fsanitize=thread -g -pthread
 
 C_FILE      	=       main.c	\
 						utils/ft_atoll.c \
@@ -10,6 +10,7 @@ C_FILE      	=       main.c	\
 						init/init.c \
 						thread.c \
 						exit.c \
+						utils.c \
 
 SRC_DIR         =       ./src/
 

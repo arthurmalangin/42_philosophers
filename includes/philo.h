@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:20:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 03:11:24 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:07:15 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				nb_philo;
-	int				dead;
-	int				*dead_flag;
+	int				*dead;
 	int				nb_of_eat_each_need;
 	size_t			time_last_eat;
 	size_t			time_to_sleep;
@@ -34,9 +33,9 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
-	pthread_mutex_t	protect_dead;
-	pthread_mutex_t	protect_eat;
-	pthread_mutex_t	protect_time;
+	pthread_mutex_t	*protect_dead;
+	pthread_mutex_t	*protect_eat;
+	pthread_mutex_t	*protect_time;
 }					t_philo;
 
 typedef struct s_program
@@ -46,6 +45,7 @@ typedef struct s_program
 	int				nb_of_eat_each_need;
 	pthread_mutex_t	protect_dead;
 	pthread_mutex_t	protect_eat;
+	pthread_mutex_t	protect_time;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 }					t_program;

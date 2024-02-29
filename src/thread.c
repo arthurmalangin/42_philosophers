@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:07:39 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 03:15:35 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 16:15:02 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,28 @@
 
 int	is_alive(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->protect_dead);
-	if (*(philo->dead_flag) == 1)
+	pthread_mutex_lock(philo->protect_dead);
+	//printf("philo %d: dead flag %d\n", philo->id, *philo->dead);
+	if (*philo->dead == 1)
 	{
-		pthread_mutex_unlock(&philo->protect_dead);
+		pthread_mutex_unlock(philo->protect_dead);
 		return (0);
 	}
-	pthread_mutex_unlock(&philo->protect_dead);
+	pthread_mutex_unlock(philo->protect_dead);
 	return (1);
 }
 
 void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->l_fork);
-	pthread_mutex_lock(&philo->protect_time);
 	printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
 	pthread_mutex_lock(philo->r_fork);
 	printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
-	pthread_mutex_lock(&philo->protect_eat);
+	pthread_mutex_lock(philo->protect_eat);
 	printf("%ld %d is eating\n", ft_get_time() - philo->time_start, philo->id);
 	philo->time_last_eat = ft_get_time();
+	pthread_mutex_unlock(philo->protect_eat);
 	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(&philo->protect_eat);
-	pthread_mutex_unlock(&philo->protect_time);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
@@ -59,35 +58,34 @@ void	*routine(void *ptr)
 	
 	philo = ptr;
 	if (philo->id % 2 == 0)
-		ft_usleep(100);
+		ft_usleep(1);
 	while (is_alive(philo) && philo->nb_philo > 1)
 	{
 		eat(philo);
 		bed(philo);
 		think(philo);
-	}	
+	}
+	return (ptr);
 }
 
-int	check_death(t_program **program, t_philo **philo)
+int	check_death(t_program *program, t_philo *philo)
 {
 	int	i;
 
 	i = 0;
-	while (i < (*program)->nb_philo)
+	while (i < program->nb_philo)
 	{
-		//printf("check death\n");
-		pthread_mutex_lock(&(*philo)[i].protect_eat);//&program->philos[i].protect_eat
-		if (ft_get_time() - (*program)->philos[i].time_last_eat >= (*program)->philos[i].time_to_die && (*program)->philos[i].dead == 0)
+		pthread_mutex_lock(&program->protect_eat);
+		if (ft_get_time() - program->philos[i].time_last_eat >= program->philos[i].time_to_die)
 		{
-			pthread_mutex_lock(&(*program)->philos[i].protect_dead);
-			printf("%ld %d died\n", ft_get_time() - (*program)->philos->time_start, (*program)->philos[i].id);
-			(*program)->philos[i].dead = 1;
-			(*program)->dead = 1;
-			pthread_mutex_unlock(&(*program)->philos[i].protect_dead);
-			pthread_mutex_unlock(&(*program)->philos[i].protect_eat);
+			pthread_mutex_lock(&program->protect_dead);
+			printf("%ld %d died\n", ft_get_time() - program->philos->time_start, program->philos[i].id);
+			*philo->dead = 1;
+			pthread_mutex_unlock(&program->protect_dead);
+			pthread_mutex_unlock(&program->protect_eat);
 			return (1);
 		}
-		pthread_mutex_unlock(&(*program)->philos[i].protect_eat);
+		pthread_mutex_unlock(&program->protect_eat);
 		i++;
 	}
 	return (0);
@@ -101,7 +99,7 @@ void	*monitoring(void *ptr)
 	program = (t_program *)ptr;
 	while (1)
 	{
-		if (check_death(&program, &program->philos) == 1)
+		if (check_death(program, program->philos) == 1)
 			break ;
 	}
 	/*printf("dead flag %d\n", program->dead);
@@ -125,12 +123,12 @@ void	create_thread(t_program	*program, t_philo *philo, pthread_mutex_t *forks)
 		i++;
 	}
 	i = 0;
+	if (pthread_join(elmonitor, NULL))
+		printf("Error thread join\n");
 	while (i < program->nb_philo)
 	{
 		if (pthread_join(philo[i].thread, NULL))
 			printf("Error Thread join\n");
 		i++;
 	}
-	if (pthread_join(elmonitor, NULL))
-		printf("Error thread join\n");
 }

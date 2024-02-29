@@ -6,7 +6,7 @@
 /*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:04:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/27 17:06:16 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:37:51 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	end_all_thread(t_program **program, t_philo **philo)
 	i = 0;
 	while (i < (*program)->nb_philo)
 	{
-		pthread_mutex_destroy(&(*philo)[i].protect_dead);
-		pthread_mutex_destroy(&(*philo)[i].protect_eat);
-		pthread_mutex_destroy(&(*philo)[i].protect_time);
+		pthread_mutex_destroy((*philo)[i].protect_dead);
+		pthread_mutex_destroy((*philo)[i].protect_eat);
+		pthread_mutex_destroy((*philo)[i].protect_time);
 		i++;
 	}
 	i = 0;

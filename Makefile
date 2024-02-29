@@ -2,7 +2,8 @@ NAME      		=		philo
 
 CC              =       clang
 
-FLAG            =      	-fsanitize=thread -g -pthread
+FLAG            =		-g -pthread
+#-fsanitize=thread 
 
 C_FILE      	=       main.c	\
 						utils/ft_atoll.c \

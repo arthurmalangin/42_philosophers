@@ -6,7 +6,7 @@
 /*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:06:52 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/26 23:11:12 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:13:04 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void init_program(t_program *program, pthread_mutex_t *forks, char **argv)
 	program->forks = forks;
 	pthread_mutex_init(&program->protect_dead, NULL);
 	pthread_mutex_init(&program->protect_eat, NULL);
+	pthread_mutex_init(&program->protect_time, NULL);
 }
 
 void	init_forks(pthread_mutex_t *forks, char **argv)
@@ -50,12 +51,11 @@ void	init_philos(t_philo *philos, t_program *program, pthread_mutex_t *forks, ch
 	{
 		philos[i].id = i + 1;
 		philos[i].nb_philo = nb_philo;
-		philos[i].dead_flag = &program->dead;
-		philos[i].dead = 0;
+		philos[i].dead = &program->dead;
 		philos[i].nb_of_eat_each_need = program->nb_of_eat_each_need;
-		pthread_mutex_init(&philos[i].protect_dead, NULL);
-		pthread_mutex_init(&philos[i].protect_eat, NULL);
-		pthread_mutex_init(&philos[i].protect_time, NULL);
+		philos[i].protect_dead = &program->protect_dead;
+		philos[i].protect_eat = &program->protect_eat;
+		philos[i].protect_time = &program->protect_time;
 		if (i == 0)
 		{
 			philos[0].l_fork = &forks[nb_philo - 1];

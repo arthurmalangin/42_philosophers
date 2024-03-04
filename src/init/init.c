@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
+/*   By: deymons <deymons@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:06:52 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 15:13:04 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:55:38 by deymons          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_philos(t_philo *philos, t_program *program, pthread_mutex_t *forks, ch
 		philos[i].nb_philo = nb_philo;
 		philos[i].dead = &program->dead;
 		philos[i].nb_of_eat_each_need = program->nb_of_eat_each_need;
+		philos[i].nb_eat = 0;
 		philos[i].protect_dead = &program->protect_dead;
 		philos[i].protect_eat = &program->protect_eat;
 		philos[i].protect_time = &program->protect_time;

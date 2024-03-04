@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
+/*   By: deymons <deymons@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 18:07:39 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 16:15:02 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:59:56 by deymons          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,29 @@ int	is_alive(t_philo *philo)
 	return (1);
 }
 
+void message_secure(t_philo *philo, char *message)
+{
+	pthread_mutex_lock(philo->protect_dead);
+	if (*philo->dead == 0)
+		printf("%ld %d %s\n", ft_get_time() - philo->time_start, philo->id, message);
+	//else
+	//	printf("%ld %d %s dead state: %d\n", ft_get_time() - philo->time_start, philo->id, "is dead", *philo->dead);
+	pthread_mutex_unlock(philo->protect_dead);
+}
+
 void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->l_fork);
-	printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
+	message_secure(philo, "has taken a fork");
+	//printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
 	pthread_mutex_lock(philo->r_fork);
-	printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
+	message_secure(philo, "has taken a fork");
+	//printf("%ld %d has taken a fork\n", ft_get_time() - philo->time_start, philo->id);
 	pthread_mutex_lock(philo->protect_eat);
-	printf("%ld %d is eating\n", ft_get_time() - philo->time_start, philo->id);
+	message_secure(philo, "is eating");
+	//printf("%ld %d is eating\n", ft_get_time() - philo->time_start, philo->id);
 	philo->time_last_eat = ft_get_time();
+	philo->nb_eat++;
 	pthread_mutex_unlock(philo->protect_eat);
 	ft_usleep(philo->time_to_eat);
 	pthread_mutex_unlock(philo->r_fork);
@@ -43,12 +57,14 @@ void	eat(t_philo *philo)
 void	think(t_philo *philo)
 {
 	//todo Data race do a mutex for time
-	printf("%ld %d is thinking\n", ft_get_time() - philo->time_start, philo->id);
+	message_secure(philo, "is thinking");
+	//printf("%ld %d is thinking\n", ft_get_time() - philo->time_start, philo->id);
 }
 
 void	bed(t_philo *philo)
 {
-	printf("%ld %d is sleeping\n", ft_get_time() - philo->time_start, philo->id);
+	//printf("%ld %d is sleeping\n", ft_get_time() - philo->time_start, philo->id);
+	message_secure(philo, "is sleeping");
 	ft_usleep(philo->time_to_sleep);
 }
 
@@ -59,6 +75,7 @@ void	*routine(void *ptr)
 	philo = ptr;
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
+	//printf("philo %d is alive and death status is: %d\n", philo->id, *philo->dead);
 	while (is_alive(philo) && philo->nb_philo > 1)
 	{
 		eat(philo);
@@ -91,6 +108,27 @@ int	check_death(t_program *program, t_philo *philo)
 	return (0);
 }
 
+int	check_each_eat(t_program *program)
+{
+	int	i;
+
+	i = 0;
+	if (program->nb_of_eat_each_need == -1)
+		return (0);
+	while (i < program->nb_philo)
+	{
+		pthread_mutex_lock(&program->protect_eat);
+		if (program->philos[i].nb_eat < program->nb_of_eat_each_need)
+		{
+			pthread_mutex_unlock(&program->protect_eat);
+			return (0);
+		}
+		pthread_mutex_unlock(&program->protect_eat);
+		i++;
+	}
+	return (1);
+}
+
 void	*monitoring(void *ptr)
 {
 	t_program *program;
@@ -101,6 +139,14 @@ void	*monitoring(void *ptr)
 	{
 		if (check_death(program, program->philos) == 1)
 			break ;
+		if (check_each_eat(program) == 1)
+		{
+			printf("All philo have eaten enough\n");
+			pthread_mutex_lock(&program->protect_dead);
+			program->dead = 1;
+			pthread_mutex_unlock(&program->protect_dead);
+			break ;
+		}
 	}
 	/*printf("dead flag %d\n", program->dead);
 	printf("philo dead %d\n", program->philos[0].dead);

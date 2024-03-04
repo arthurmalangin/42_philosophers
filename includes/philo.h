@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
+/*   By: deymons <deymons@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:20:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 15:07:15 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:38:23 by deymons          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_philo
 	int				id;
 	int				nb_philo;
 	int				*dead;
+	int				nb_eat;
 	int				nb_of_eat_each_need;
 	size_t			time_last_eat;
 	size_t			time_to_sleep;

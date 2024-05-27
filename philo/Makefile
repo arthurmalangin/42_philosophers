@@ -1,21 +1,22 @@
 NAME      		=		philo
 
-CC              =       clang
+CC              =       cc
 
-FLAG            =		-g -pthread
-#-fsanitize=thread 
+FLAG            =		-Wextra -Wall -Werror -pthread -fsanitize=thread
+#-g -pthread -fsanitize=thread 
 
 C_FILE      	=       main.c	\
-						utils/ft_atoll.c \
-						utils/time.c \
-						init/init.c \
+						ft_atoll.c \
+						time.c \
+						init.c \
 						thread.c \
 						exit.c \
-						utils.c \
+						routine.c \
+						monitoring.c \
 
-SRC_DIR         =       ./src/
+SRC_DIR         =       ./
 
-INC_DIR         =       ./includes/
+INC_DIR         =       ./
 
 SRC				=		$(addprefix $(SRC_DIR),$(C_FILE))
 

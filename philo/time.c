@@ -3,29 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 19:35:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/01/30 19:38:54 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:24:23 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "philo.h"
 
-int     ft_usleep(size_t milliseconds)
+int	timer_custom(size_t milliseconds)
 {
-        size_t  start;
+	size_t	i;
 
-        start = ft_get_time();
-        while ((ft_get_time() - start) < milliseconds)
-                usleep(500);
-        return (0);
+	i = get_current_time();
+	while ((get_current_time() - i) < milliseconds)
+	{
+		usleep(500);
+	}
+	return (0);
 }
 
-size_t  ft_get_time(void)
+size_t	get_current_time(void)
 {
-        struct timeval  time;
+	struct timeval	temptime;
 
-		gettimeofday(&time, NULL);
-        return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	gettimeofday(&temptime, NULL);
+	return (temptime.tv_sec * 1000 + temptime.tv_usec / 1000);
 }

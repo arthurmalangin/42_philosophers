@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangin@student.42.fr>         +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:04:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/02/28 14:37:51 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:37:26 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 void	end_all_thread(t_program **program, t_philo **philo)
 {

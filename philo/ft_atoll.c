@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 16:55:10 by amalangi          #+#    #+#             */
-/*   Updated: 2024/01/30 14:56:32 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:23:59 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/philo.h"
+#include "philo.h"
 
 long long int	ft_atoll(const char *str)
 {

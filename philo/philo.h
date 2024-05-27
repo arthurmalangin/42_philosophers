@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: deymons <deymons@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 14:20:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/03/04 11:38:23 by deymons          ###   ########.fr       */
+/*   Updated: 2024/05/27 14:50:51 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_philo
 	size_t			time_to_eat;
 	size_t			time_to_die;
 	size_t			time_start;
+	int				is_eating;
 
 	pthread_t		thread;
 	pthread_mutex_t	*l_fork;
@@ -37,11 +38,12 @@ typedef struct s_philo
 	pthread_mutex_t	*protect_dead;
 	pthread_mutex_t	*protect_eat;
 	pthread_mutex_t	*protect_time;
+	pthread_mutex_t	*protect_message;
 }					t_philo;
 
 typedef struct s_program
 {
-	int 			nb_philo;
+	int				nb_philo;
 	int				dead;
 	int				nb_of_eat_each_need;
 	pthread_mutex_t	protect_dead;
@@ -49,14 +51,22 @@ typedef struct s_program
 	pthread_mutex_t	protect_time;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	protect_message;
+	pthread_mutex_t	protect_forks;
 }					t_program;
 
 long long int	ft_atoll(const char *str);
-void			init_all(pthread_mutex_t *forks, t_philo *philos, t_program *program, char **argv);
-void			create_thread(t_program	*program, t_philo *philo, pthread_mutex_t *forks);
-size_t			ft_get_time(void);
-int				ft_usleep(size_t milliseconds);
+void			init_all(pthread_mutex_t *forks, t_philo *philos,
+					t_program *program, char **argv);
+void			create_thread(t_program	*program, t_philo *philo);
+size_t			get_current_time(void);
+int				timer_custom(size_t milliseconds);
 void			end_all_thread(t_program **program, t_philo **philo);
 void			print_message(t_philo *philo, int message);
+void			*monitoring(void *ptr);
+void			*routine(void *ptr);
+void			message_secure(t_philo *philo, char *message);
+int				is_alive(t_philo *philo);
+int				philosopher_dead(t_philo *philo, size_t time_to_die);
 
 #endif

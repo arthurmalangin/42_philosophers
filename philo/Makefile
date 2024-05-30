@@ -2,8 +2,7 @@ NAME      		=		philo
 
 CC              =       cc
 
-FLAG            =		-Wextra -Wall -Werror -pthread -fsanitize=thread
-#-g -pthread -fsanitize=thread 
+FLAG            =		-Wextra -Wall -Werror -pthread
 
 C_FILE      	=       main.c	\
 						ft_atoll.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:12:30 by amalangi          #+#    #+#             */
-/*   Updated: 2024/05/27 14:24:10 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:41:35 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,16 @@ void	*monitoring(void *ptr)
 	program = (t_program *)ptr;
 	while (1)
 	{
+		timer_custom(1);
 		if (check_death(program, program->philos) == 1)
 			break ;
 		if (check_each_eat(program) == 1)
 		{
+			pthread_mutex_lock(&program->protect_dead);
 			pthread_mutex_lock(&program->protect_message);
 			printf("\x1B[32mAll philo have eaten enough\033[0m\n");
-			pthread_mutex_unlock(&program->protect_message);
-			pthread_mutex_lock(&program->protect_dead);
 			program->dead = 1;
+			pthread_mutex_unlock(&program->protect_message);
 			pthread_mutex_unlock(&program->protect_dead);
 			break ;
 		}

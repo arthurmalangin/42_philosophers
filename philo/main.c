@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:50:14 by amalangi          #+#    #+#             */
-/*   Updated: 2024/05/27 14:52:01 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/05/30 18:38:11 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,17 @@ int	main(int argc, char **argv)
 		return (1);
 	if (argc == 6)
 	{
-		if (ft_atoll(argv[5]) < 1)
+		if (ft_atoll(argv[5]) < 1 || ft_atoll(argv[5]) > 2147483647)
 		{
 			printf("Error: bad values for number_of_times_each_philosopher\n");
 			return (1);
 		}
+	}
+	if (ft_atoll(argv[2]) > 2147483647 || ft_atoll(argv[3])
+		> 2147483647 || ft_atoll(argv[4]) > 2147483647)
+	{
+		printf("Error: values higher than INT_MAX ms.\n");
+		return (1);
 	}
 	init_all(forks, philos, &program, argv);
 	create_thread(&program, philos);

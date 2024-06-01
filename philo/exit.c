@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 00:04:55 by amalangi          #+#    #+#             */
-/*   Updated: 2024/05/27 14:37:26 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:35:00 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,4 @@ void	end_all_thread(t_program **program, t_philo **philo)
 		pthread_detach((*philo)[i].thread);
 		i++;
 	}
-	exit(0);
 }

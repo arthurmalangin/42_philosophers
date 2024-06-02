@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amalangi <amalangi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amalangi <amalangi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 14:50:14 by amalangi          #+#    #+#             */
-/*   Updated: 2024/05/30 18:38:11 by amalangi         ###   ########.fr       */
+/*   Updated: 2024/06/01 17:58:35 by amalangi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,44 @@ int	check_args(int argc, char **argv)
 	return (0);
 }
 
+int	ft_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (2048);
+	return (0);
+}
+
+int	valid_digit_input(char **argv)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (argv[i] && i <= 6)
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (!ft_isdigit(argv[i][j]))
+			{
+				printf("Error: some inputs not digit !\n");
+				return (1);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	pthread_mutex_t	forks[200];
 	t_philo			philos[200];
 	t_program		program;
 
+	if (valid_digit_input(argv))
+		return (1);
 	if (check_args(argc, argv))
 		return (1);
 	if (argc == 6)
